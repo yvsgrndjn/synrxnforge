@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "synrxnforge"
+version = "0.1.0"
+description = "Synthetic reaction SMILES data augmentation using SMARTS templates and a pool of molecules"
+authors = [{ name = "Yves Grandjean", email = "yves.grandjean@unibe.ch" }]
+license = { text = "MIT" }
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = [
+    "pandas",
+    "reaction-utils",
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[project.scripts]
+synrxnforge = "synrxnforge.cli:main"
