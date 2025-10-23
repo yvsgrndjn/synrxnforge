@@ -468,15 +468,15 @@ class SynRxnForge:
         """
         os.makedirs(out_dir, exist_ok=True)
         parquet_path = os.path.join(out_dir, f"{base_name}.parquet")
-        csv_path = os.path.join(out_dir, f"{base_name}.csv")
+        #csv_path = os.path.join(out_dir, f"{base_name}.csv")
  
         df.to_parquet(parquet_path, index=False)
-        df.to_csv(csv_path, index=False)
+        #df.to_csv(csv_path, index=False)
  
         print(f"[INFO] Saved: {parquet_path}")
-        print(f"[INFO] Saved: {csv_path}")
+        #print(f"[INFO] Saved: {csv_path}")
  
-    def main(self, out_dir: str = "./outputs", smiles: list[str] | None = None):
+    def main(self, out_dir: str = "./outputs", smiles: list[str] | None = None, chunk_id: int | None = None):
         """
         Execute the full SynRxnForge pipeline.
 
@@ -487,6 +487,9 @@ class SynRxnForge:
         smiles : list[str] | None
             Optional in-memory list of product SMILES to process. If omitted,
             the instance's `pool_dataset_path` is used.
+        chunk_id : int | None
+            Optional chunk index. If provided, the output filename is suffixed
+            with `_chunk{chunk_id}` for HPC chunking.
 
         Returns
         -------
@@ -518,6 +521,10 @@ class SynRxnForge:
         df = self.tag_rxn_smi_df(df)
  
         flat_df = self.flatten_rxn_columns(df)
+        base_name = "synthetic_reactions"
+        if chunk_id is not None:
+            base_name += f"chunk{chunk_id}"
+
         self.save_reactions(flat_df, out_dir)
  
         return flat_df
